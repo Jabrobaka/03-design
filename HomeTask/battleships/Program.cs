@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Threading;
+using Ninject;
 
 namespace battleships
 {
@@ -17,8 +18,8 @@ namespace battleships
 				return;
 			}
 			var aiPath = args[0];
-			var settings = new Settings("settings.txt");
-			var tester = new AiTester(settings);
+		    var DIPContainer = new StandardKernel(new NinjectConfig());
+			var tester = DIPContainer.Get<AiTester>();
 			if (File.Exists(aiPath))
 				tester.TestSingleFile(aiPath);
 			else
