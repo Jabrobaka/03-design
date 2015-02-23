@@ -9,34 +9,40 @@ namespace battleships
 	{
 		private static readonly Logger resultsLog = LogManager.GetLogger("results");
 		private readonly Settings settings;
+	    private readonly IGameVisualizer gameVisualizer;
+	    private readonly IProcessMonitor processMonitor;
+        private readonly IAiFactory aiFactory;
+	    private readonly IGameFactory gameFactory;
 
-		public AiTester(Settings settings)
+	    public AiTester(Settings settings, IGameVisualizer gameVisualizer,
+            IProcessMonitor processMonitor, IAiFactory aiFactory, 
+            IGameFactory gameFactory)
 		{
-			this.settings = settings;
+		    this.settings = settings;
+	        this.gameVisualizer = gameVisualizer;
+	        this.processMonitor = processMonitor;
+	        this.aiFactory = aiFactory;
+	        this.gameFactory = gameFactory;
 		}
 
-		public void TestSingleFile(string exe)
+	    public void TestSingleFile(string exePath)
 		{
-			var gen = new MapGenerator(settings, new Random(settings.RandomSeed));
-			var vis = new GameVisualizer();
-			var monitor = new ProcessMonitor(TimeSpan.FromSeconds(settings.TimeLimitSeconds * settings.GamesCount), settings.MemoryLimit);
 			var badShots = 0;
 			var crashes = 0;
 			var gamesPlayed = 0;
 			var shots = new List<int>();
-			var ai = new Ai(exe, monitor);
+	        var ai = aiFactory.Get(exePath);
 			for (var gameIndex = 0; gameIndex < settings.GamesCount; gameIndex++)
 			{
-				var map = gen.GenerateMap();
-				var game = new Game(map, ai);
-				RunGameToEnd(game, vis);
+			    var game = gameFactory.Get(ai);
+				RunGameToEnd(game, gameVisualizer);
 				gamesPlayed++;
 				badShots += game.BadShots;
 				if (game.AiCrashed)
 				{
 					crashes++;
 					if (crashes > settings.CrashLimit) break;
-					ai = new Ai(exe, monitor);
+					ai = new Ai(exePath, processMonitor);
 				}
 				else
 					shots.Add(game.TurnsCount);
@@ -51,7 +57,7 @@ namespace battleships
 			WriteTotal(ai, shots, crashes, badShots, gamesPlayed);
 		}
 
-		private void RunGameToEnd(Game game, GameVisualizer vis)
+		private void RunGameToEnd(IGame game, IGameVisualizer vis)
 		{
 			while (!game.IsOver())
 			{
@@ -66,7 +72,7 @@ namespace battleships
 			}
 		}
 
-		private void WriteTotal(Ai ai, List<int> shots, int crashes, int badShots, int gamesPlayed)
+		private void WriteTotal(IAi ai, List<int> shots, int crashes, int badShots, int gamesPlayed)
 		{
 			if (shots.Count == 0) shots.Add(1000 * 1000);
 			shots.Sort();
