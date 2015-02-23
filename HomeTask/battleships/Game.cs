@@ -10,15 +10,15 @@ namespace battleships
 		public Vector Target;
 	}
 
-	public class Game
-	{
+    public class Game : IGame
+    {
 		private static readonly Logger log = LogManager.GetCurrentClassLogger();
 		private readonly Ai ai;
 
-		public Game(Map map, Ai ai)
+		public Game(Map map, IAi ai)
 		{
 			Map = map;
-			this.ai = ai;
+			this.ai = (Ai) ai;
 			TurnsCount = 0;
 			BadShots = 0;
 		}
