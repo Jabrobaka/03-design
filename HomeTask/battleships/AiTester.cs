@@ -17,26 +17,26 @@ namespace battleships
 
 		public void TestSingleFile(string exe)
 		{
-			var gen = new MapGenerator(settings, new Random(settings.RandomSeed));
-			var vis = new GameVisualizer();
+			var mapGenerator = new MapGenerator(settings, new Random(settings.RandomSeed));
+			var visualizer = new GameVisualizer();
 			var monitor = new ProcessMonitor(TimeSpan.FromSeconds(settings.TimeLimitSeconds * settings.GamesCount), settings.MemoryLimit);
 			var badShots = 0;
 			var crashes = 0;
 			var gamesPlayed = 0;
 			var shots = new List<int>();
-			var ai = new Ai(exe, monitor);
-			for (var gameIndex = 0; gameIndex < settings.GamesCount; gameIndex++)
+			var ai = RunAi(exe, monitor);
+		    for (var gameIndex = 0; gameIndex < settings.GamesCount; gameIndex++)
 			{
-				var map = gen.GenerateMap();
+				var map = mapGenerator.GenerateMap();
 				var game = new Game(map, ai);
-				RunGameToEnd(game, vis);
+				RunGameToEnd(game, visualizer);
 				gamesPlayed++;
 				badShots += game.BadShots;
 				if (game.AiCrashed)
 				{
 					crashes++;
 					if (crashes > settings.CrashLimit) break;
-					ai = new Ai(exe, monitor);
+                    ai = RunAi(exe, monitor);
 				}
 				else
 					shots.Add(game.TurnsCount);
@@ -51,7 +51,14 @@ namespace battleships
 			WriteTotal(ai, shots, crashes, badShots, gamesPlayed);
 		}
 
-		private void RunGameToEnd(Game game, GameVisualizer vis)
+	    private static Ai RunAi(string exe, ProcessMonitor monitor)
+	    {
+	        var ai = new Ai(exe);
+	        ai.ProcessCreated += monitor.Register;
+	        return ai;
+	    }
+
+	    private void RunGameToEnd(Game game, GameVisualizer vis)
 		{
 			while (!game.IsOver())
 			{
