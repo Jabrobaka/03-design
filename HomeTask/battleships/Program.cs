@@ -18,13 +18,30 @@ namespace battleships
 			}
 			var aiPath = args[0];
 			var settings = new Settings("settings.txt");
-			var tester = new AiTester(settings);
-		    var aiFactory = new AiFactory(settings);
 		    if (File.Exists(aiPath))
 		    {
+
+                var tester = new AiTester(settings);
+                var aiFactory = new AiFactory(settings);
+                var visualiser = new GameVisualizer();
 		        var ai = aiFactory.CreateAi(aiPath);
-		        var testResult = tester.TestSingleAi(ai);
-                tester.WriteTotal(testResult);
+		        var gameGenerator = new GameGenerator(settings);
+                gameGenerator.AddGameStepPerformedHandler(visualiser.Visualize);
+		        if (settings.Verbose)
+		        {
+		            gameGenerator.AddGameEndedHandler(new GameVerboseWriter().Write);
+		        }
+		        if (settings.Interactive)
+		        {
+                    gameGenerator.AddAiCrashHandler(game =>
+                    {
+                        Console.WriteLine(game.LastError.Message);
+                        Console.ReadKey();
+                    });
+		        }
+		        var testReporter = new AiTestReporter(settings);
+		        var testResult = tester.TestSingleAi(ai, gameGenerator);
+                testReporter.WriteTotal(testResult);
 		    }
 		    else
 		        Console.WriteLine("No AI exe-file " + aiPath);
