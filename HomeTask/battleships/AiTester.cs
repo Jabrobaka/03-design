@@ -15,15 +15,12 @@ namespace battleships
 			this.settings = settings;
 		}
 
-		public AiTestResult TestSingleAi(Ai ai)
+		public AiTestResult TestSingleAi(Ai ai, GameGenerator gameGenerator)
 		{
-			var mapGenerator = new MapGenerator(settings, new Random(settings.RandomSeed));
 			var visualizer = new GameVisualizer();
 		    var testResult = new AiTestResult(ai.Name);
-		    for (var gameIndex = 0; gameIndex < settings.GamesCount; gameIndex++)
+		    foreach (var game in gameGenerator.GenerateGames(ai))
 			{
-				var map = mapGenerator.GenerateMap();
-				var game = new Game(map, ai);
 				RunGameToEnd(game, visualizer);
 			    testResult.GamesPlayed++;
 			    testResult.BadShots += game.BadShots;
@@ -39,7 +36,7 @@ namespace battleships
 				{
 					Console.WriteLine(
 						"Game #{3,4}: Turns {0,4}, BadShots {1}{2}",
-						game.TurnsCount, game.BadShots, game.AiCrashed ? ", Crashed" : "", gameIndex);
+						game.TurnsCount, game.BadShots, game.AiCrashed ? ", Crashed" : "", testResult.GamesPlayed-1);
 				}
 			}
 		    return testResult;

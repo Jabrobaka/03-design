@@ -52,6 +52,7 @@
     <Compile Include="AiFactory.cs" />
     <Compile Include="AiTestResult.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="GameGenerator.cs" />
     <Compile Include="GameVisualizer.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="MapGenerator.cs" />
