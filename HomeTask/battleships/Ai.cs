@@ -6,7 +6,7 @@ using NLog;
 
 namespace battleships
 {
-	public class Ai
+	public class Ai : IDisposable
 	{
 	    public event Action<Process> ProcessCreated; 
 
@@ -31,7 +31,7 @@ namespace battleships
 			return ReceiveNextShot();
 		}
 
-		public Vector GetNextShot(Vector lastShotTarget, ShtEffct lastShot)
+		public Vector GetNextShot(Vector lastShotTarget, ShootEffect lastShot)
 		{
 			SendMessage("{0} {1} {2}", lastShot, lastShotTarget.X, lastShotTarget.Y);
 			return ReceiveNextShot();
@@ -100,5 +100,7 @@ namespace battleships
 				throw new Exception("Wrong ai output: " + output, e);
 			}
 		}
+
+
 	}
 }
