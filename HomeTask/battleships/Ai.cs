@@ -102,5 +102,9 @@ namespace battleships
 		}
 
 
+	    public void Restart()
+	    {
+	        this.Dispose();
+	    }
 	}
 }
