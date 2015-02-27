@@ -15,6 +15,10 @@ namespace battleships
 		private static readonly Logger log = LogManager.GetCurrentClassLogger();
 		private readonly Ai ai;
 
+        public event Action<Game> GameEnded;
+	    public event Action<Game> GameStepPerformed;
+	    public event Action<Game> AiCrash;
+
 		public Game(Map map, Ai ai)
 		{
 			Map = map;
@@ -46,9 +50,22 @@ namespace battleships
 			LastShotInfo = new ShotInfo {Target = LastTarget, Hit = hit};
             if (hit == ShootEffect.Miss)
 				TurnsCount++;
+		    CallStepEvents();
 		}
 
-		private bool UpdateLastTarget()
+	    private void CallStepEvents()
+	    {
+	        if (GameStepPerformed != null)
+	        {
+	            GameStepPerformed(this);
+	        }
+	        if (IsOver() && GameEnded != null)
+	        {
+	            GameEnded(this);
+	        }
+	    }
+
+	    private bool UpdateLastTarget()
 		{
 			try
 			{
@@ -63,6 +80,10 @@ namespace battleships
 				log.Info("Ai {0} crashed", ai.Name);
 				log.Error(e);
 				LastError = e;
+			    if (AiCrash != null)
+			    {
+                    AiCrash(this);
+			    }
 				return false;
 			}
 		}
