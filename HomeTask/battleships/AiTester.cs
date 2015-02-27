@@ -60,7 +60,7 @@ namespace battleships
 			}
 		}
 
-	    public void WritetoTal(AiTestResult result)
+	    public void WriteTotal(AiTestResult result)
 	    {
 	        WriteTotal(result.AiName, result.Shots, result.Crashes, result.BadShots, result.GamesPlayed);
 	    }
