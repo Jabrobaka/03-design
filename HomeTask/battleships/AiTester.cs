@@ -60,7 +60,12 @@ namespace battleships
 			}
 		}
 
-		public void WriteTotal(string aiName, List<int> shots, int crashes, int badShots, int gamesPlayed)
+	    public void WritetoTal(AiTestResult result)
+	    {
+	        WriteTotal(result.AiName, result.Shots, result.Crashes, result.BadShots, result.GamesPlayed);
+	    }
+
+		private void WriteTotal(string aiName, List<int> shots, int crashes, int badShots, int gamesPlayed)
 		{
 			if (shots.Count == 0) shots.Add(1000 * 1000);
 			shots.Sort();
