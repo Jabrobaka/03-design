@@ -19,10 +19,15 @@ namespace battleships
 			var aiPath = args[0];
 			var settings = new Settings("settings.txt");
 			var tester = new AiTester(settings);
-			if (File.Exists(aiPath))
-				tester.TestSingleFile(aiPath);
-			else
-				Console.WriteLine("No AI exe-file " + aiPath);
+		    var aiFactory = new AiFactory(settings);
+		    if (File.Exists(aiPath))
+		    {
+		        var ai = aiFactory.CreateAi(aiPath);
+		        var testResult = tester.TestSingleAi(ai);
+                tester.WriteTotal(testResult);
+		    }
+		    else
+		        Console.WriteLine("No AI exe-file " + aiPath);
 		}
 	}
 }
