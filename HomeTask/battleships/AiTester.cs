@@ -10,17 +10,14 @@ namespace battleships
 		private static readonly Logger resultsLog = LogManager.GetLogger("results");
 		private readonly Settings settings;
 	    private readonly IGameVisualizer gameVisualizer;
-	    private readonly IProcessMonitor processMonitor;
         private readonly IAiFactory aiFactory;
 	    private readonly IGameFactory gameFactory;
 
-	    public AiTester(Settings settings, IGameVisualizer gameVisualizer,
-            IProcessMonitor processMonitor, IAiFactory aiFactory, 
+	    public AiTester(Settings settings, IGameVisualizer gameVisualizer, IAiFactory aiFactory, 
             IGameFactory gameFactory)
 		{
 		    this.settings = settings;
 	        this.gameVisualizer = gameVisualizer;
-	        this.processMonitor = processMonitor;
 	        this.aiFactory = aiFactory;
 	        this.gameFactory = gameFactory;
 		}
@@ -42,7 +39,8 @@ namespace battleships
 				{
 					crashes++;
 					if (crashes > settings.CrashLimit) break;
-					ai = new Ai(exePath, processMonitor);
+                    ai.Dispose();
+					ai = aiFactory.Get(exePath);
 				}
 				else
 					shots.Add(game.TurnsCount);
