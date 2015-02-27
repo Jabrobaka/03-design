@@ -6,7 +6,7 @@ namespace battleships
 {
 	public class ShotInfo
 	{
-		public ShtEffct Hit;
+		public ShootEffect Hit;
 		public Vector Target;
 	}
 
@@ -44,7 +44,7 @@ namespace battleships
 			if (IsBadShot(LastTarget)) BadShots++;
 			var hit = Map.Badaboom(LastTarget);
 			LastShotInfo = new ShotInfo {Target = LastTarget, Hit = hit};
-			if (hit == ShtEffct.Miss)
+            if (hit == ShootEffect.Miss)
 				TurnsCount++;
 		}
 

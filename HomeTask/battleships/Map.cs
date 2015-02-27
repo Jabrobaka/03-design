@@ -20,7 +20,7 @@ namespace battleships
 	}
 
 	///<summary>Результат выстрела</summary>
-	public enum ShtEffct
+	public enum ShootEffect
 	{
 		
 		Miss,
@@ -140,7 +140,7 @@ namespace battleships
 		}
 
 		///<summary>Бойтесь все!!!</summary>
-		public ShtEffct Badaboom(Vector target)
+		public ShootEffect Badaboom(Vector target)
 		{
 			var hit = CheckBounds(target) && this[target] == MapCell.Ship;
 			
@@ -150,12 +150,12 @@ namespace battleships
 				var ship = shipsMap[target.X, target.Y];
 				ship.AliveCells.Remove(target);
 				this[target] = MapCell.DeadOrWoundedShip;
-				return ship.Alive ? ShtEffct.Wound : ShtEffct.Kill;
+				return ship.Alive ? ShootEffect.Wound : ShootEffect.Kill;
 			}
 
 
 			if (this[target] == MapCell.Empty) this[target] = MapCell.Miss;
-			return ShtEffct.Miss;
+			return ShootEffect.Miss;
 		}
 
 		///<summary>Окрестность ячейки</summary>
