@@ -18,6 +18,7 @@ namespace battleships
 		public Game(Map map, IAi ai)
 		{
 			Map = map;
+            //это приведение не нужно и потенциально опасно, достаточно как и везде поменять тип поля ai на IAi
 			this.ai = (Ai) ai;
 			TurnsCount = 0;
 			BadShots = 0;

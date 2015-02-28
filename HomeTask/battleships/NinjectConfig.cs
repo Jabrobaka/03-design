@@ -13,6 +13,7 @@ namespace battleships
 
             Bind<IGameVisualizer>().To<GameVisualizer>();
             Bind<IMapGenerator>().To<MapGenerator>()
+                //todo: эта строчка лишняя, при попытке подтянуть Settings контейнер и так найдет нужные настройки
                 .WithConstructorArgument("settings", settings)
                 .WithConstructorArgument("random", new Random(settings.RandomSeed));
             Bind<IProcessMonitor>().To<ProcessMonitor>()

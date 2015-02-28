@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Threading;
 using Ninject;
+using Ninject.Extensions.Conventions;
 
 namespace battleships
 {
@@ -18,6 +19,7 @@ namespace battleships
 				return;
 			}
 			var aiPath = args[0];
+            //todo: обычно контейнер называют DI container, без P (principle)
 		    var DIPContainer = new StandardKernel(new NinjectConfig());
 			var tester = DIPContainer.Get<AiTester>();
 			if (File.Exists(aiPath))
@@ -25,5 +27,27 @@ namespace battleships
 			else
 				Console.WriteLine("No AI exe-file " + aiPath);
 		}
+
+        //Conventions позволяют не писать много однотипных байндингов аля Bind<интерфейс>.To<класс>();
+        private static IKernel InitContainer()
+        {
+            var kernel = new StandardKernel();
+            
+            kernel.Bind<Settings>().ToSelf().InSingletonScope().WithConstructorArgument("settings.txt");
+            var settings = kernel.Get<Settings>();
+
+            kernel.Bind(c =>
+                c.FromThisAssembly()
+                    .SelectAllClasses()
+                    .BindAllInterfaces()
+                    .Configure(b => b.InSingletonScope())
+                    .ConfigureFor<MapGenerator>(
+                        b => b.WithConstructorArgument("random", new Random(settings.RandomSeed)))
+                    .ConfigureFor<ProcessMonitor>(
+                        b => b.WithConstructorArgument("timeLimit", TimeSpan.FromSeconds(settings.TimeLimitSeconds*settings.GamesCount))
+                              .WithConstructorArgument("memoryLimit", (long) settings.MemoryLimit)));
+
+            return kernel;
+        }
 	}
 }
