@@ -8,6 +8,7 @@ namespace battleships
 {
 	public class Ai : IDisposable
 	{
+        // ≈сть распространенна€ практика названи€ event'ов - OnProcessCreated
 	    public event Action<Process> ProcessCreated; 
 
 		private static readonly Logger log = LogManager.GetCurrentClassLogger();

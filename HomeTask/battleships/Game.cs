@@ -15,6 +15,7 @@ namespace battleships
 		private static readonly Logger log = LogManager.GetCurrentClassLogger();
 		private readonly Ai ai;
 
+        // ≈сть распространенна€ практика названи€ event'ов - OnGameEnded, OnAiCrashed и т.д.
         public event Action<Game> GameEnded;
 	    public event Action<Game> GameStepPerformed;
 	    public event Action<Game> AiCrash;

@@ -17,6 +17,7 @@ namespace battleships
             Shots = new List<int>();
         }
 
+        //неиспользуемый конструктор, можно удалить
         public AiTestResult(int badShots, int crashes, int gamesPlayed, List<int> shots, string aiName)
         {
             BadShots = badShots;

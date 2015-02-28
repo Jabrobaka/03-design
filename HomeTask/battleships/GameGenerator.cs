@@ -22,7 +22,9 @@ namespace battleships
 
         public IEnumerable<Game> GenerateGames(Ai ai)
         {
+            // Будет создано gamesCount игр на одинаковых картах. Багулечка.
             var map = mapGenerator.GenerateMap();
+            // Без событий абстракция для генерации нескольких игр не нужна. Можно обойтись Enumerable.Range или своим Extension'ом
             for (int i = 0; i < gamesCount; i++)
             {
                 var game = new Game(map, ai);
@@ -35,7 +37,7 @@ namespace battleships
 
         public void AddGameEndedHandler(Action<Game> action)
         {
-               gameEndedHandlers.Add(action);
+            gameEndedHandlers.Add(action);
         }
 
         public void AddGameStepPerformedHandler(Action<Game> action)

@@ -2,6 +2,7 @@
 
 namespace battleships
 {
+    // Очень странная абстракция + внутри хранится состояние, в рамках этого задания мы хотим уйти от таких вещей
     class GameVerboseWriter
     {
         private int gamesWritten = 0;

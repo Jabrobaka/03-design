@@ -35,6 +35,10 @@ namespace battleships
 	        var visualiser = new GameVisualizer();
 	        var ai = aiFactory.CreateAi(aiPath);
 	        var gameGenerator = new GameGenerator(settings);
+
+            // 3 события, 2 абстракции + один экшн - но по факту ответственность одна - визуализация работы игры
+            // Предлагаю вообще отвязаться от событийной модели + сделать одну абстракцию для визуализации результатов
+
 	        gameGenerator.AddGameStepPerformedHandler(visualiser.Visualize);
 	        if (settings.Verbose)
 	        {
