@@ -19,6 +19,7 @@ namespace battleships
         public void WriteTotal(string aiName, IEnumerable<Game> totalGames)
         {
             var games = totalGames.ToList();
+            // Кажется, WriteVerbose раньше вызывался не в конце всего тестирования, а после каждой сыгранной игры. надо бы поправить.
             if (settings.Verbose)
             {
                 for (int i = 0; i < games.Count(); i++)
@@ -73,6 +74,9 @@ namespace battleships
 
 		public void VisualizeStep(Game game)
 		{
+		    if (!settings.Interactive)
+		        return;
+
 			Console.Clear();
 			Console.WriteLine(MapToString(game));
 			Console.WriteLine("Turn: {0}", game.TurnsCount);

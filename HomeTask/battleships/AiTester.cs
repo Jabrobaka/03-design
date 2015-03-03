@@ -6,13 +6,16 @@ namespace battleships
 	public class AiTester
 	{
 		private readonly Settings settings;
+        // ќкей, пусть так - если по-другому не влазит
+	    private readonly GameVisualizer gameVisualizer;
 
-		public AiTester(Settings settings)
+	    public AiTester(Settings settings, GameVisualizer gameVisualizer)
 		{
-			this.settings = settings;
+		    this.settings = settings;
+		    this.gameVisualizer = gameVisualizer;
 		}
 
-		public IEnumerable<Game> TestSingleAi(Ai ai, IEnumerable<Game> games )
+	    public IEnumerable<Game> TestSingleAi(Ai ai, IEnumerable<Game> games)
 		{
             // —ейчас у AiTester две ответственности - запускать серию игр и накапливать результаты. 
             // ѕредлагаю избавитьс€ от второй - возвращать массив результатов игр, AiTestReporter сможет сам собрать нужную статистику.
