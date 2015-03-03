@@ -15,10 +15,7 @@ namespace battleships
 		private static readonly Logger log = LogManager.GetCurrentClassLogger();
 		private readonly Ai ai;
 
-        // ≈сть распространенна€ практика названи€ event'ов - OnGameEnded, OnAiCrashed и т.д.
-        public event Action<Game> GameEnded;
 	    public event Action<Game> GameStepPerformed;
-	    public event Action<Game> AiCrash;
 
 		public Game(Map map, Ai ai)
 		{
@@ -51,20 +48,12 @@ namespace battleships
 			LastShotInfo = new ShotInfo {Target = LastTarget, Hit = hit};
             if (hit == ShootEffect.Miss)
 				TurnsCount++;
-		    CallStepEvents();
+            if (GameStepPerformed != null)
+            {
+                GameStepPerformed(this);
+            }
 		}
 
-	    private void CallStepEvents()
-	    {
-	        if (GameStepPerformed != null)
-	        {
-	            GameStepPerformed(this);
-	        }
-	        if (IsOver() && GameEnded != null)
-	        {
-	            GameEnded(this);
-	        }
-	    }
 
 	    private bool UpdateLastTarget()
 		{
@@ -81,10 +70,6 @@ namespace battleships
 				log.Info("Ai {0} crashed", ai.Name);
 				log.Error(e);
 				LastError = e;
-			    if (AiCrash != null)
-			    {
-                    AiCrash(this);
-			    }
 				return false;
 			}
 		}

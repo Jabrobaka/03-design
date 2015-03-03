@@ -33,7 +33,7 @@ namespace battleships
                 var mapGenerator = new MapGenerator(settings, new Random(settings.RandomSeed));
                 var games = Enumerable.Range(0, settings.GamesCount)
                     .Select(i => mapGenerator.GenerateMap())
-                    .Select((map, i) =>
+                    .Select(map =>
                     {
                         var game = new Game(map, ai);
                         if (settings.Interactive)
