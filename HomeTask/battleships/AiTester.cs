@@ -12,28 +12,25 @@ namespace battleships
 			this.settings = settings;
 		}
 
-		public AiTestResult TestSingleAi(Ai ai, GameGenerator gameGenerator)
+		public IEnumerable<Game> TestSingleAi(Ai ai, IEnumerable<Game> games )
 		{
-		    var testResult = new AiTestResult(ai.Name);
             // —ейчас у AiTester две ответственности - запускать серию игр и накапливать результаты. 
             // ѕредлагаю избавитьс€ от второй - возвращать массив результатов игр, AiTestReporter сможет сам собрать нужную статистику.
             // Ќа RunGameToEnd можно возвращать сам результат игры
-
-		    foreach (var game in gameGenerator.GenerateGames(ai))
+		    var crashes = 0;
+		    var endedGames = new List<Game>();
+            foreach (var game in games)
 			{
 				RunGameToEnd(game);
-			    testResult.GamesPlayed++;
-			    testResult.BadShots += game.BadShots;
 				if (game.AiCrashed)
 				{
-				    testResult.Crashes++;
-					if (testResult.Crashes > settings.CrashLimit) break;
+				    crashes++;
+					if (crashes > settings.CrashLimit) break;
 				    ai.Restart();
 				}
-				else
-					testResult.Shots.Add(game.TurnsCount);
+                endedGames.Add(game);
 			}
-		    return testResult;
+		    return endedGames;
 		}
 
 	    private void RunGameToEnd(Game game)
