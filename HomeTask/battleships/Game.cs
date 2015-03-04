@@ -13,13 +13,13 @@ namespace battleships
     public class Game : IGame
     {
 		private static readonly Logger log = LogManager.GetCurrentClassLogger();
-		private readonly Ai ai;
+		private readonly IAi ai;
 
 		public Game(Map map, IAi ai)
 		{
 			Map = map;
             //это приведение не нужно и потенциально опасно, достаточно как и везде поменять тип поля ai на IAi
-			this.ai = (Ai) ai;
+			this.ai = ai;
 			TurnsCount = 0;
 			BadShots = 0;
 		}

@@ -9,7 +9,7 @@
             this.monitor = monitor;
         }
 
-        public IAi Get(string exePath)
+        public IAi Create(string exePath)
         {
             return new Ai(exePath, monitor);
         }

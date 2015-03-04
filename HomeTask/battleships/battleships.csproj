@@ -69,7 +69,6 @@
     <Compile Include="Map.cs" />
     <Compile Include="MapGenerator.cs" />
     <Compile Include="Map_should.cs" />
-    <Compile Include="NinjectConfig.cs" />
     <Compile Include="ProcessMonitor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -19,16 +19,14 @@ namespace battleships
 				return;
 			}
 			var aiPath = args[0];
-            //todo: обычно контейнер называют DI container, без P (principle)
-		    var DIPContainer = new StandardKernel(new NinjectConfig());
-			var tester = DIPContainer.Get<AiTester>();
+		    var DIContainer = InitContainer();
+			var tester = DIContainer.Get<AiTester>();
 			if (File.Exists(aiPath))
 				tester.TestSingleFile(aiPath);
 			else
 				Console.WriteLine("No AI exe-file " + aiPath);
 		}
 
-        //Conventions позволяют не писать много однотипных байндингов аля Bind<интерфейс>.To<класс>();
         private static IKernel InitContainer()
         {
             var kernel = new StandardKernel();

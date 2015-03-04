@@ -9,7 +9,7 @@
             this.mapGenerator = mapGenerator;
         }
 
-        public IGame Get(IAi ai)
+        public IGame Create(IAi ai)
         {
             return new Game(mapGenerator.GenerateMap(), ai);
         }

@@ -28,10 +28,10 @@ namespace battleships
 			var crashes = 0;
 			var gamesPlayed = 0;
 			var shots = new List<int>();
-	        var ai = aiFactory.Get(exePath);
+	        var ai = aiFactory.Create(exePath);
 			for (var gameIndex = 0; gameIndex < settings.GamesCount; gameIndex++)
 			{
-			    var game = gameFactory.Get(ai);
+			    var game = gameFactory.Create(ai);
 				RunGameToEnd(game, gameVisualizer);
 				gamesPlayed++;
 				badShots += game.BadShots;
@@ -40,7 +40,7 @@ namespace battleships
 					crashes++;
 					if (crashes > settings.CrashLimit) break;
                     ai.Dispose();
-					ai = aiFactory.Get(exePath);
+					ai = aiFactory.Create(exePath);
 				}
 				else
 					shots.Add(game.TurnsCount);
