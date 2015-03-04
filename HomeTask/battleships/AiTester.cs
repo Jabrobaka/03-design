@@ -6,17 +6,17 @@ namespace battleships
 	public class AiTester
 	{
 		private readonly Settings settings;
+        // ќкей, пусть так - если по-другому не влазит
+	    private readonly GameVisualizer gameVisualizer;
 
-		public AiTester(Settings settings)
+	    public AiTester(Settings settings, GameVisualizer gameVisualizer)
 		{
-			this.settings = settings;
+		    this.settings = settings;
+		    this.gameVisualizer = gameVisualizer;
 		}
 
-		public IEnumerable<Game> TestSingleAi(Ai ai, IEnumerable<Game> games )
+	    public void TestSingleAi(Ai ai, IEnumerable<Game> games)
 		{
-            // —ейчас у AiTester две ответственности - запускать серию игр и накапливать результаты. 
-            // ѕредлагаю избавитьс€ от второй - возвращать массив результатов игр, AiTestReporter сможет сам собрать нужную статистику.
-            // Ќа RunGameToEnd можно возвращать сам результат игры
 		    var crashes = 0;
 		    var endedGames = new List<Game>();
             foreach (var game in games)
@@ -29,8 +29,13 @@ namespace battleships
 				    ai.Restart();
 				}
                 endedGames.Add(game);
+
+                if (settings.Verbose)
+                {
+                    gameVisualizer.WriteVerbose(game, endedGames.Count);
+                }
 			}
-		    return endedGames;
+            gameVisualizer.WriteTotal(ai.Name, endedGames);
 		}
 
 	    private void RunGameToEnd(Game game)
@@ -38,6 +43,7 @@ namespace battleships
 			while (!game.IsOver())
 			{
 				game.MakeStep();
+                gameVisualizer.VisualizeStep(game);
 			}
 		}	    
 	}

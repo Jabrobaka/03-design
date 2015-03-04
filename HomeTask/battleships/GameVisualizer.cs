@@ -19,20 +19,13 @@ namespace battleships
         public void WriteTotal(string aiName, IEnumerable<Game> totalGames)
         {
             var games = totalGames.ToList();
-            if (settings.Verbose)
-            {
-                for (int i = 0; i < games.Count(); i++)
-                {
-                    WriteVerbose(games[i], i);
-                }
-            }
             var shots = games.Where(game => !game.AiCrashed).Select(game => game.TurnsCount).ToList();
             var crashes = games.Count(game => game.AiCrashed);
             var badshots = games.Sum(game => game.BadShots);
             WriteTotal(aiName, shots, crashes, badshots, games.Count);
         }
 
-        private void WriteVerbose(Game game, int gameIndex)
+        public void WriteVerbose(Game game, int gameIndex)
         {
             Console.WriteLine(
                 "Game #{3,4}: Turns {0,4}, BadShots {1}{2}",
@@ -73,6 +66,9 @@ namespace battleships
 
 		public void VisualizeStep(Game game)
 		{
+		    if (!settings.Interactive)
+		        return;
+
 			Console.Clear();
 			Console.WriteLine(MapToString(game));
 			Console.WriteLine("Turn: {0}", game.TurnsCount);
@@ -85,9 +81,7 @@ namespace battleships
                 Console.WriteLine(game.LastError.Message);
             Console.ReadKey();
 
-		}
-
-        
+		}       
 
 		private string MapToString(Game game)
 		{
