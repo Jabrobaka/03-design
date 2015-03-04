@@ -29,7 +29,6 @@ namespace battleships
 				    ai.Restart();
 				}
                 endedGames.Add(game);
-
                 if (settings.Verbose)
                 {
                     gameVisualizer.WriteVerbose(game, endedGames.Count);

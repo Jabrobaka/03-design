@@ -16,6 +16,13 @@ namespace battleships
             this.settings = settings;
         }
 
+        public void WriteVerbose(Game game, int gameIndex)
+        {
+            Console.WriteLine(
+                "Game #{3,4}: Turns {0,4}, BadShots {1}{2}",
+                game.TurnsCount, game.BadShots, game.AiCrashed ? ", Crashed" : "", gameIndex);
+        }
+
         public void WriteTotal(string aiName, IEnumerable<Game> totalGames)
         {
             var games = totalGames.ToList();
@@ -23,14 +30,7 @@ namespace battleships
             var crashes = games.Count(game => game.AiCrashed);
             var badshots = games.Sum(game => game.BadShots);
             WriteTotal(aiName, shots, crashes, badshots, games.Count);
-        }
-
-        public void WriteVerbose(Game game, int gameIndex)
-        {
-            Console.WriteLine(
-                "Game #{3,4}: Turns {0,4}, BadShots {1}{2}",
-                game.TurnsCount, game.BadShots, game.AiCrashed ? ", Crashed" : "", gameIndex);
-        }
+        }        
 
         private void WriteTotal(string aiName, List<int> shots, int crashes, int badShots, int gamesPlayed)
         {
