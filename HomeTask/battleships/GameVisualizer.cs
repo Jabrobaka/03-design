@@ -16,8 +16,11 @@ namespace battleships
             this.settings = settings;
         }
 
-        public void WriteVerbose(Game game, int gameIndex)
+        public void WriteGameResult(Game game, int gameIndex)
         {
+            if (!settings.Verbose)
+                return;
+
             Console.WriteLine(
                 "Game #{3,4}: Turns {0,4}, BadShots {1}{2}",
                 game.TurnsCount, game.BadShots, game.AiCrashed ? ", Crashed" : "", gameIndex);

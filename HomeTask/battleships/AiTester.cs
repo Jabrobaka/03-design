@@ -29,10 +29,7 @@ namespace battleships
 				    ai.Restart();
 				}
                 endedGames.Add(game);
-                if (settings.Verbose)
-                {
-                    gameVisualizer.WriteVerbose(game, endedGames.Count);
-                }
+                gameVisualizer.WriteGameResult(game, endedGames.Count);
 			}
             gameVisualizer.WriteTotal(ai.Name, endedGames);
 		}
